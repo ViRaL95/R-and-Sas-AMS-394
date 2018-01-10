@@ -1,0 +1,196 @@
+Varun Rao 
+109217549
+Homework2
+AMS 394
+
+Problem 1 
+---------
+logret = read.delim("d_logret_6stocks.txt")
+attach(logret)
+1. t.test(AmerExp)
+    a. p value is .8516, less than alpha (.05) so True mean of Annex is not equal to 0. Fail to reject Ho
+2. wilcox.test(AmerExp)
+    a. p value is .3225, true mean of Amex return is not equal to 0. Fail to reject Ho
+3.t.test(Pfizer, AmerExp)
+    a. p value is .318 so mean returns of Pfizer and Amex are different. Accept Ho
+4. wilcox.test(Pfizer, AmerExp)
+    a. p value is .1162 so mean return of Pfizer and Amex are different. Accept Ho
+5. var.test(Pfizer, AmerExp)
+    a. p value is .03896 so variances of Pfizer and Amex are different. Reject Ho
+
+
+
+
+Problem 2
+---------
+
+#Initial Ho = The blood pressures for the rats in 26 degrees and 5 degrees are the same u0=u1
+#Initial H1 = The blood pressures for the rats in 5 degrees is greater than those in 26 degrees u0>u1
+-
+#Data Samples are independent because 12 elements in combined sets
+
+> rat26 = c(152, 157, 179, 182, 176, 149)
+> rat5 =  c(384, 369, 354, 375, 366, 423)
+
+#Perform Shapiro Test to test Normality of both sets
+#Ho for Both: They are Normal
+#H1 for Both: They are Not Normal
+
+> shapiro.test(rat26)
+> shapiro.test(rat5)
+
+#Both Tests return a p value greater than alpha so fail to reject Ho(They are both normal)
+
+#Test if pooled or unpooled
+#Ho = Standard Deviations are Equal
+#H1 = Standard Deviations are not Equal
+
+> var.test(rat26, rat5)
+
+#P value is greater than alpha fail to reject Ho, Standard Deviations are Equal (pooled)
+
+> t.test(rat5, rat26, alternative="greater", paired=F, var.equal=T)
+
+#P value is less than alpha therefore reject Ho.
+#Blood pressure of rats in 5 degrees is greater than those in 26 degrees
+
+Problem 3
+---------
+a)
+
+#Initial Ho = The thickness is the same in eyes affected and unaffected by glaucoma u0=u1
+#Initial H1 = The thickness is not the same in eyes affected and unaffected u0 != u1
+
+#Data samples are paired because 8 elements in combined set
+
+> affected = c(488, 478, 480, 426, 440, 410, 458, 460)
+> unaffected = c(484, 478, 492, 444, 436, 398, 464, 476)
+
+#Perform sharpiro test on difference
+
+#Null hypothesis is paired data is normal
+#Alternating Hypothesis is paired data is not normal
+
+> shapiro.test(affected - unaffected).
+
+#p value is greater than alpha(.10), fail to reject Ho.
+#Paired data is normal
+
+#Perform t test
+
+> t.test(affected - unaffected, conf.level=.90)
+
+#P value is .3273 which is greater than alpha, fail to reject null hypothesis. 
+The thickness is the same in eyes affected and unaffected by glaucoma
+
+b)
+
+The 90% confidence interval computed by the above t test is from -11.196549 3.196549
+
+Problem 4
+-----------
+
+#Initial Null Hypothesis = The mean time over the past month is the same as the mean time over the past 5 years. u1 = 25
+#Initial Alternating Hypothesis = The meantime over the past month is greater than over the past 5 years u1 > 25
+
+> time = c(28, 25, 27, 31, 10, 26, 30, 15, 55, 12, 24, 32, 28, 42, 38)
+
+#Perform shapiro test to test normality
+
+> shapiro.test(time)
+
+# p value (.4038) is greater than alpha therefore data is normal
+
+#Perform t test 
+> t.test(time, mu=25, alternative="greater")
+# p value (.1485) is greater than alpha so fail to reject Null hypothesis. 
+The meantime over the past month is not greater than over the past 5 years
+
+
+
+#Problem 5
+------------
+attach(logret)
+
+a) With y intercept
+> lm(Pfizer~Exxon)
+
+(Intercept)        Exxon  
+  -0.005325     0.354649  
+
+
+b)
+Without y intercept
+> lm(Pfizer~Exxon-1)
+
+Coefficients:
+ Exxon  
+0.3183  
+
+c)
+Find Correlation, due to NA we use complete.obs
+> cor(Pfizer, Exxon, use="complete.obs")
+
+0.3520965
+
+Test if correlation is 0
+
+> cor.test(Exxon, Pfizer)
+
+	Pearson's product-moment correlation
+
+data:  Exxon and Pfizer
+t = 2.9621, df = 62, p-value = 0.004328
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.1163578 0.5502798
+sample estimates:
+      cor 
+0.3520965 
+
+#p value (.004) is less than alpha, therefore we accept the Alternating hypothesis, correlation is not equal to 0
+
+
+#Problem 6
+----------
+a)
+
+> advertising = c(2.4, 1.6, 2.0, 2.6, 1.4, 1.6, 2.0, 2.2)
+> sales = c(225, 184, 220, 240, 180, 184, 186, 215)
+> cor(advertising, sales)
+
+0.9129053 - Correlation Coefficient
+
+b)
+> lm(sales~advertising)
+
+Coefficients:
+(Intercept)  advertising  
+     104.06        50.73  
+
+Company Sales = 104.06 + 50.73 * Advertising Expenses
+
+c)
+> summary(lm(sales~advertising))
+  Adjusted R-squared:  0.8056 
+
+d) 
+> summary(lm(sales~advertising))
+Pr(>|t|) = .0479
+It is greater than .01 therefore there is no relationship
+
+
+e) 104.06 + 50.73 * 1.8 = $195.374 thousand dolloars = $195,374 dollars
+
+Problem 7
+---------
+
+library(ISwR)
+data(rmr)
+attach(rmr)
+b = lm(metabolic.rate~body.weight)
+expMR = b$coefficients[2]*80 + b$coefficients[1]
+
+Expected Metabolic Rate is 1375.989
+
+Plot is attached to in the email
