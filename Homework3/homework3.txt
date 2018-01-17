@@ -1,0 +1,226 @@
+Homework 3
+Varun Rao
+109217549
+
+PROBLEM 1
+----------------
+
+Exercise 2
+
+DATA sales ;
+INFILE 'D:\Users\vrao\Desktop\Onions.dat';
+INPUT VisitingTeam $ 1-20 ConcessionSales 21-24 BleacherSales 25-28 OurHits 29-31 
+TheirHits 32-34 OurRuns 35-37 TheirRuns 38-40;
+PROC PRINT DATA = sales; TITLE 'SAS Data Set Sales'; RUN;
+
+
+The output of this datset can be seen in Homework3_Problem1_Part1A
+Exercise 3
+
+If I delete the 19th column the 3 in 35 is moved into Columbia Peaches and the data after that gets distorted in the 
+observation. Columns 21-24 will now become 5  6 which is not a number. Columns 25-28 will become 7  1 which is not a number
+and will not be recorded as one in the Result. Columns 29-31 will be   1, which will be recorded as a 1 on the Results.
+Columns 32-34 will be recorded as   0 2 which will show as a 2 on the output. Columns 35-37 will be recorded as a   1 
+which wil be recorded as a 1 on the output. 
+
+This can be seen in Homework3_Problem1_Part1B
+
+PROBLEM 2 
+------------------
+
+DATA nationalparks;
+INPUT ParkName $ 1-22 State $ Year @40 Acreage COMMA9.;
+DATALINES;
+Yellowstone           ID/MT/WY 1872    4,065,493
+Everglades            FL 1934          1,398,800
+Yosemite              CA 1864           760,917
+Great Smoky Mountains NC/TN 1926        520,269
+Wolf Trap Farm        VA 1966           130
+;
+PROC PRINT DATA = nationalparks;
+TITLE 'Selected National Parks';
+RUN;
+
+EXERCISE 5
+
+IF I DELETE ONE BLANK COLUMN before 4,065,493 Then the @40 symbol tells SAS to start reading from ,065,493 which is equivalent to 65,493
+This can be seen in Homework3_Problem2_Part1A.PNG
+
+EXERCISE 6
+
+ORIGINAL CODE:
+
+DATA nationalparks;
+INPUT ParkName $ 1-22 State $ Year @40 Acreage COMMA9.;
+DATALINES;
+Yellowstone           ID/MT/WY 1872    4,065,493
+Everglades            FL 1934          1,398,800
+Yosemite              CA 1864          760,917
+Great Smoky Mountains NC/TN 1926       520,269
+Wolf Trap Farm        VA 1966          130
+;
+PROC PRINT DATA = nationalparks;
+TITLE ’Selected National Parks’;
+RUN;
+
+IF I REMOVE THE @40, this tells SAS to begin Reading 9 columns immediately after The State and Year, 
+and will not read the Acerage data completely. In the first column 4,065 will be read in. This can be seen in 
+Homework3_Problem2_Part1B.PNG
+
+PROBLEM 3
+-------------
+DATA reading;
+INFILE 'D:\Users\vrao\Desktop\Books.txt' DLM='09'X;
+INPUT NAME $ Week1 Week2 Week3 Week4 Week5;
+RUN;
+
+PROC PRINT DATA = reading;
+TITLE 'Reading Record';
+RUN;
+
+The output of this result set can be seen in the image Homework3_Problem3.PNG
+
+PROBLEM 4
+---------------
+DATA contest;
+INPUT Name $16. Age 3. +1 Type $1. +1 Date MMDDYY10.
+(Scr1 Scr2 Scr3 Scr4 Scr5) (4.1);
+TotalScore=SUM(Scr1, Scr2, Scr3, Scr4, Scr5);
+AvgScore = MEAN(Scr1, Scr2, Scr3, Scr4, Scr5);
+DayEntered = DAY(Date);
+Type = UPCASE(Type);
+DATALINES;
+Alicia Grossman  13 c 10-28-2003 7.8 6.5 7.2 8.0 7.9
+Matthew Lee      9  D 10-30-2003 6.5 5.9 6.8 6.0 8.1
+Elizabeth Garcia 10 C 10-29-2003 8.9 7.9 8.5 9.0 8.8
+Lori Newcombe    6  D 10-30-2003 6.7 5.6 4.9 5.2 6.1
+Jose Martinez    7  d 10-31-2003 8.9 9.510.0 9.7 9.0
+Brian Williams   11 C 10-29-2003 7.8 8.4 8.5 7.9 8.0
+;
+PROC PRINT DATA = contest;
+TITLE 'Pumpkin Carving Contest';
+RUN;
+
+
+The output of this result can be seen in the image Homework3_Problem4.PNG 
+PROBLEM 5
+----------------
+DATA sportscars;
+INFILE '\\mysbfiles.campus.stonybrook.edu\vrao\Cars.dat';
+INPUT Model $ Year Make $ Seats Color $;
+IF Year < 1975 THEN Status = 'classic';
+IF Model = 'Corvette' OR MODEL = 'Camaro' THEN MAKE = 'Chevy';
+IF MODEL = 'Miata' THEN DO;
+Make = 'MAZADA';
+Seats = 2;
+END;
+PROC PRINT DATA = sportscars;
+TITLE "Eddy's Excellent Emporium of Usd Sports Cars";
+RUN;
+
+
+See Homework3_Problem5.PNG
+
+
+PROBLEM 6
+-----------------
+DATA homeimprovements;
+INPUT Owner $ 1-7 Description $ 9-33 Cost;
+IF Cost = . THEN CostGroup = 'missing';
+ELSE IF Cost < 3000 THEN CostGroup = 'low';
+ELSE IF Cost < 90000 THEN CostGroup = 'medium';
+ELSE CostGroup = 'high';
+DATALINES;
+Bob     kitchen cabinet face-lift 1253.00
+Shirley bathroom addition         11350.70
+Silvia  paint exterior            .
+Al      backyard gazebo           3098.63
+Norm    paint interior            647.77
+Kathy   second floor addition     75362.93
+;
+PROC PRINT DATA = homeimprovements;
+TITLE 'Home Improvement Cost Groups';
+RUN;
+
+See Homework3_Problem6.PNG
+PROBLEM 7
+-----------
+(1) 
+
+DATA comedy;
+INPUT Title $ 1-26 Year Type $;
+IF Type = 'tragedy' OR Type = 'romance' or TYPE = 'history' THEN DELETE;
+DATALINES;
+A Midsummer Night’s Dream 1595 comedy
+Comedy of Errors          1590 comedy
+Hamlet                    1600 tragedy
+Macbeth                   1606 tragedy
+Richard III               1594 history
+Romeo and Juliet          1596 tragedy
+Taming of the Shrew       1593 comedy
+Tempest                   1611 romance
+;
+PROC PRINT DATA = comedy;
+TITLE 'Shakespearean Comedies';
+RUN;
+
+
+See Homework3_Problem7_PartA.PNG
+(2)
+
+DATA comedy;
+INPUT Title $ 1-26 Year Type $;
+IF Type = 'tragedy' OR Type = 'romance' THEN DELETE;
+DATALINES;
+A Midsummer Night’s Dream 1595 comedy
+Comedy of Errors          1590 comedy
+Hamlet                    1600 tragedy
+Macbeth                   1606 tragedy
+Richard III               1594 history
+Romeo and Juliet          1596 tragedy
+Taming of the Shrew       1593 comedy
+Tempest                   1611 romance
+;
+PROC PRINT DATA = comedy;
+TITLE 'Shakespearean Comedies';
+RUN;
+
+See Homework3_Problem7_PartB.PNG
+(3)
+
+DATA comedy;
+INPUT Title $ 1-26 Year Type $;
+IF Type = 'tragedy';
+DATALINES;
+A Midsummer Night’s Dream 1595 comedy
+Comedy of Errors          1590 comedy
+Hamlet                    1600 tragedy
+Macbeth                   1606 tragedy
+Richard III               1594 history
+Romeo and Juliet          1596 tragedy
+Taming of the Shrew       1593 comedy
+Tempest                   1611 romance
+;
+PROC PRINT DATA = comedy;
+TITLE 'Shakespearean Comedies';
+RUN;
+
+See Homework3_Problem7_PartC.PNG
+
+PROBLEM 8
+-----------
+DATA test_scores;                                                                                                                       
+INFILE '\\mysbfiles.campus.stonybrook.edu\vrao\test_scores.txt' DLM='09'X;                                                              
+INPUT NAME $ Test1 Test2 Test3;                                                                                                         
+Average = MEAN(Test1, Test2, Test3);                                                                                                    
+RUN;                                                                                                                                    
+PROC SORT; BY descending Average;                                                                                                       
+PROC PRINT DATA = test_scores;                                                                                                          
+TITLE 'Reading Record';                                                                                                                 
+RUN;                                                                                                                                    
+                                                                                                                                        
+See Homework3_Problem8.PNG                                                                                                                                                                                                                                                                   
+                                                                                                                                        
+                                                                                                                                        
+                     
+
